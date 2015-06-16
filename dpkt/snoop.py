@@ -1,5 +1,5 @@
 # $Id$
-# -*- coding: utf-8 -*-
+
 """Snoop file format."""
 
 import sys, time
@@ -7,23 +7,23 @@ import dpkt
 
 # RFC 1761
 
-SNOOP_MAGIC = 0x736E6F6F70000000L
+SNOOP_MAGIC = 0x736E6F6F70000000
 
 SNOOP_VERSION = 2
 
-SDL_8023 = 0
-SDL_8024 = 1
-SDL_8025 = 2
-SDL_8026 = 3
-SDL_ETHER = 4
-SDL_HDLC = 5
+SDL_8023   = 0
+SDL_8024   = 1
+SDL_8025   = 2
+SDL_8026   = 3
+SDL_ETHER  = 4
+SDL_HDLC   = 5
 SDL_CHSYNC = 6
-SDL_IBMCC = 7
-SDL_FDDI = 8
-SDL_OTHER = 9
+SDL_IBMCC  = 7
+SDL_FDDI   = 8
+SDL_OTHER  = 9
 
-dltoff = {SDL_ETHER: 14}
 
+dltoff = { SDL_ETHER:14 }
 
 class PktHdr(dpkt.Packet):
     """snoop packet header."""
@@ -35,8 +35,7 @@ class PktHdr(dpkt.Packet):
         ('cum_drops', 'I', 0),
         ('ts_sec', 'I', 0),
         ('ts_usec', 'I', 0),
-    )
-
+        )
 
 class FileHdr(dpkt.Packet):
     """snoop file header."""
@@ -45,12 +44,10 @@ class FileHdr(dpkt.Packet):
         ('magic', 'Q', SNOOP_MAGIC),
         ('v', 'I', SNOOP_VERSION),
         ('linktype', 'I', SDL_ETHER),
-    )
-
+        )
 
 class Writer(object):
     """Simple snoop dumpfile writer."""
-
     def __init__(self, fileobj, linktype=SDL_ETHER):
         self.__f = fileobj
         fh = FileHdr(linktype=linktype)
@@ -62,8 +59,8 @@ class Writer(object):
         s = str(pkt)
         n = len(s)
         pad_len = 4 - n % 4 if n % 4 else 0
-        ph = PktHdr(orig_len=n, incl_len=n,
-                    rec_len=PktHdr.__hdr_len__ + n + pad_len,
+        ph = PktHdr(orig_len=n,incl_len=n,
+                    rec_len=PktHdr.__hdr_len__+n+pad_len,
                     ts_sec=int(ts),
                     ts_usec=int((int(ts) - float(ts)) * 1000000.0))
         self.__f.write(str(ph))
@@ -71,7 +68,6 @@ class Writer(object):
 
     def close(self):
         self.__f.close()
-
 
 class Reader(object):
     """Simple pypcap-compatible snoop file reader."""

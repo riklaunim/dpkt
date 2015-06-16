@@ -32,4 +32,4 @@ def test_aoeata():
 
 if __name__ == '__main__':
     test_aoeata()
-    print 'Tests Successful...'
+    print('Tests Successful...')

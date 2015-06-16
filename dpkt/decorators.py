@@ -44,7 +44,7 @@ def duration(function, repeat=10000):
         finally:
             benchtime, pystones = pystone.pystones()
             kstones = (pystones * time) / 1000
-            print '%s : time = %f kstones = %f' % (function.__name__, time, kstones)
+            print('%s : time = %f kstones = %f' % (function.__name__, time, kstones))
         return function(*args, **kwargs)
 
     return _duration
@@ -64,7 +64,10 @@ class TestDeprecatedDecorator(object):
 
     def test_deprecated_decorator(self):
         import sys
-        from StringIO import StringIO
+        try:
+            from StringIO import StringIO
+        except ImportError:
+            from io import StringIO
 
         saved_stderr = sys.stderr
         try:
@@ -91,7 +94,10 @@ class TestDurationDecorator(object):
     def test_duration_decorator(self):
         import sys
         import re
-        from StringIO import StringIO
+        try:
+            from StringIO import StringIO
+        except ImportError:
+            from io import StringIO
 
         saved_stdout = sys.stdout
         try:
@@ -108,4 +114,4 @@ if __name__ == '__main__':
     a.test_deprecated_decorator()
     a = TestDurationDecorator()
     a.test_duration_decorator()
-    print 'Tests Successful...'
+    print('Tests Successful...')

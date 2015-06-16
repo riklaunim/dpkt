@@ -46,27 +46,27 @@ xstruct: 88314.8953732 pps
     data = 'hello world'
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         dnet.ip_checksum(
             str(dpkt.ip.IP(src=src, dst=dst, p=dnet.IP_PROTO_UDP,
                            len=dnet.IP_HDR_LEN + dnet.UDP_HDR_LEN + len(data),
                            data=dpkt.udp.UDP(sport=111, dport=222,
                                              ulen=dnet.UDP_HDR_LEN + len(data),
                                              data=data))))
-    print 'dpkt:', cnt / (time.time() - start), 'pps'
+    print('dpkt:', cnt / (time.time() - start), 'pps')
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         dnet.ip_checksum(str(dpkt.ip.IP(src=src, dst=dst, p=dnet.IP_PROTO_UDP,
                                         len=dnet.IP_HDR_LEN + dnet.UDP_HDR_LEN +
                                             len(data))) +
                          str(dpkt.udp.UDP(sport=111, dport=222,
                                           ulen=dnet.UDP_HDR_LEN + len(data))) +
                          data)
-    print 'dpkt (manual):', cnt / (time.time() - start), 'pps'
+    print('dpkt (manual):', cnt / (time.time() - start), 'pps')
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         ip = ImpactPacket.IP()
         ip.set_ip_src('1.2.3.4')
         ip.set_ip_dst('5.6.7.8')
@@ -76,10 +76,10 @@ xstruct: 88314.8953732 pps
         udp.contains(ImpactPacket.Data(data))
         ip.contains(udp)
         ip.get_packet()
-    print 'impacket:', cnt / (time.time() - start), 'pps'
+    print('impacket:', cnt / (time.time() - start), 'pps')
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         p = packet.createPacket(packet.IP, packet.UDP)
         p['ip'].src = '1.2.3.4'
         p['ip'].dst = '5.6.7.8'
@@ -88,17 +88,17 @@ xstruct: 88314.8953732 pps
         p['udp'].payload = data
         p.finalise()
         p.getRaw()
-    print 'openbsd.packet:', cnt / (time.time() - start), 'pps'
+    print('openbsd.packet:', cnt / (time.time() - start), 'pps')
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         ip = scapy.IP(src='1.2.3.4', dst='5.6.7.8') / \
              scapy.UDP(sport=111, dport=222) / data
         ip.build()
-    print 'scapy:', cnt / (time.time() - start), 'pps'
+    print('scapy:', cnt / (time.time() - start), 'pps')
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         udp = xudp()
         udp.sport = 111
         udp.dport = 222
@@ -109,7 +109,7 @@ xstruct: 88314.8953732 pps
         ip.p = dnet.IP_PROTO_UDP
         ip.len = dnet.IP_HDR_LEN + udp.ulen
         dnet.ip_checksum(str(ip) + str(udp) + data)
-    print 'xstruct:', cnt / (time.time() - start), 'pps'
+    print('xstruct:', cnt / (time.time() - start), 'pps')
 
 
 def compare_parse(cnt):
@@ -123,32 +123,32 @@ xstruct: 206100.202449 pps
     s = 'E\x00\x00T\xc2\xf3\x00\x00\xff\x01\xe2\x18\n\x00\x01\x92\n\x00\x01\x0b\x08\x00\xfc\x11:g\x00\x00A,\xc66\x00\x0e\xcf\x12\x08\t\n\x0b\x0c\r\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f!"#$%&\'()*+,-./01234567'
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         dpkt.ip.IP(s)
-    print 'dpkt:', cnt / (time.time() - start), 'pps'
+    print('dpkt:', cnt / (time.time() - start), 'pps')
 
     decoder = ImpactDecoder.IPDecoder()
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         decoder.decode(s)
-    print 'impacket:', cnt / (time.time() - start), 'pps'
+    print('impacket:', cnt / (time.time() - start), 'pps')
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         packet.Packet(packet.IP, s)
-    print 'openbsd.packet:', cnt / (time.time() - start), 'pps'
+    print('openbsd.packet:', cnt / (time.time() - start), 'pps')
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         scapy.IP(s)
-    print 'scapy:', cnt / (time.time() - start), 'pps'
+    print('scapy:', cnt / (time.time() - start), 'pps')
 
     start = time.time()
-    for i in xrange(cnt):
+    for i in range(cnt):
         ip = xip(s[:dnet.IP_HDR_LEN])
         udp = xudp(s[dnet.IP_HDR_LEN:dnet.IP_HDR_LEN + dnet.UDP_HDR_LEN])
         data = s[dnet.IP_HDR_LEN + dnet.UDP_HDR_LEN:]
-    print 'xstruct:', cnt / (time.time() - start), 'pps'
+    print('xstruct:', cnt / (time.time() - start), 'pps')
 
 
 def compare_checksum(cnt):
@@ -156,12 +156,12 @@ def compare_checksum(cnt):
     start = time.time()
     for i in range(cnt):
         dpkt.in_cksum(s)
-    print 'dpkt.in_cksum:', cnt / (time.time() - start), 'pps'
+    print('dpkt.in_cksum:', cnt / (time.time() - start), 'pps')
 
     start = time.time()
     for i in range(cnt):
         dnet.ip_cksum_carry(dnet.ip_cksum_add(s, 0))
-    print 'dnet.ip_cksum_add/carry:', cnt / (time.time() - start), 'pps'
+    print('dnet.ip_cksum_add/carry:', cnt / (time.time() - start), 'pps')
 
 
 def main():
@@ -171,13 +171,13 @@ def main():
 
     ITER = 10000
 
-    print 'checksum:'
+    print('checksum:')
     compare_checksum(100000)
 
-    print 'create:'
+    print('create:')
     compare_create(ITER)
 
-    print 'parse:'
+    print('parse:')
     compare_parse(ITER)
 
 

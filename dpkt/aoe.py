@@ -3,7 +3,7 @@
 
 import struct
 import dpkt
-from decorators import deprecated
+from .decorators import deprecated
 
 
 class AOE(dpkt.Packet):
@@ -48,7 +48,7 @@ class AOE(dpkt.Packet):
     def pack_hdr(self):
         try:
             return dpkt.Packet.pack_hdr(self)
-        except struct.error, e:
+        except struct.error as e:
             raise dpkt.PackError(str(e))
 
     # Deprecated methods, will be removed in the future

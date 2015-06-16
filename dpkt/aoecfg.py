@@ -22,4 +22,4 @@ def test_aoecfg():
 
 if __name__ == '__main__':
     test_aoecfg()
-    print 'Tests Successful...'
+    print('Tests Successful...')

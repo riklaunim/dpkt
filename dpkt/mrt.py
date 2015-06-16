@@ -1,44 +1,43 @@
 # $Id: mrt.py 29 2007-01-26 02:29:07Z jon.oberheide $
-# -*- coding: utf-8 -*-
+
 """Multi-threaded Routing Toolkit."""
 
-import dpkt
-import bgp
+from . import dpkt
+from . import bgp
 
 # Multi-threaded Routing Toolkit
 # http://www.ietf.org/internet-drafts/draft-ietf-grow-mrt-03.txt
 
 # MRT Types
-NULL = 0
-START = 1
-DIE = 2
-I_AM_DEAD = 3
-PEER_DOWN = 4
-BGP = 5  # Deprecated by BGP4MP
-RIP = 6
-IDRP = 7
-RIPNG = 8
-BGP4PLUS = 9  # Deprecated by BGP4MP
-BGP4PLUS_01 = 10  # Deprecated by BGP4MP
-OSPF = 11
-TABLE_DUMP = 12
-BGP4MP = 16
-BGP4MP_ET = 17
-ISIS = 32
-ISIS_ET = 33
-OSPF_ET = 64
+NULL			= 0
+START			= 1
+DIE			= 2
+I_AM_DEAD		= 3
+PEER_DOWN		= 4
+BGP			= 5	# Deprecated by BGP4MP
+RIP			= 6
+IDRP			= 7
+RIPNG			= 8
+BGP4PLUS		= 9	# Deprecated by BGP4MP
+BGP4PLUS_01		= 10	# Deprecated by BGP4MP
+OSPF			= 11
+TABLE_DUMP		= 12
+BGP4MP			= 16
+BGP4MP_ET		= 17
+ISIS			= 32
+ISIS_ET			= 33
+OSPF_ET			= 64
 
 # BGP4MP Subtypes
-BGP4MP_STATE_CHANGE = 0
-BGP4MP_MESSAGE = 1
-BGP4MP_ENTRY = 2
-BGP4MP_SNAPSHOT = 3
-BGP4MP_MESSAGE_32BIT_AS = 4
+BGP4MP_STATE_CHANGE	= 0
+BGP4MP_MESSAGE		= 1
+BGP4MP_ENTRY		= 2
+BGP4MP_SNAPSHOT		= 3
+BGP4MP_MESSAGE_32BIT_AS	= 4
 
 # Address Family Types
-AFI_IPv4 = 1
-AFI_IPv6 = 2
-
+AFI_IPv4		= 1
+AFI_IPv6		= 2
 
 class MRTHeader(dpkt.Packet):
     __hdr__ = (
@@ -46,8 +45,7 @@ class MRTHeader(dpkt.Packet):
         ('type', 'H', 0),
         ('subtype', 'H', 0),
         ('len', 'I', 0)
-    )
-
+        )
 
 class TableDump(dpkt.Packet):
     __hdr__ = (
@@ -60,7 +58,7 @@ class TableDump(dpkt.Packet):
         ('peer_ip', 'I', 0),
         ('peer_as', 'H', 0),
         ('attr_len', 'H', 0)
-    )
+        )
 
     def unpack(self, buf):
         dpkt.Packet.unpack(self, buf)
@@ -73,7 +71,6 @@ class TableDump(dpkt.Packet):
             l.append(attr)
         self.attributes = l
 
-
 class BGP4MPMessage(dpkt.Packet):
     __hdr__ = (
         ('src_as', 'H', 0),
@@ -82,8 +79,7 @@ class BGP4MPMessage(dpkt.Packet):
         ('family', 'H', AFI_IPv4),
         ('src_ip', 'I', 0),
         ('dst_ip', 'I', 0)
-    )
-
+        )
 
 class BGP4MPMessage_32(dpkt.Packet):
     __hdr__ = (
@@ -93,4 +89,4 @@ class BGP4MPMessage_32(dpkt.Packet):
         ('family', 'H', AFI_IPv4),
         ('src_ip', 'I', 0),
         ('dst_ip', 'I', 0)
-    )
+        )
